@@ -2,9 +2,6 @@
     "name": "rentalhost/vanilla-data",
     "description": "A good way to treat an array.",
 
-    "require": {
-        "rentalhost/vanilla-version": "^1.0"
-    },
     "require-dev": {
         "phpunit/phpunit": "^4.7"
     },
