@@ -76,24 +76,22 @@ class Data implements Countable, ArrayAccess
 
     /**
      * Returns a self instance over key value.
-     * Will throws an exception, except if you avoid it by second parameter.
-     * @param  string  $key            Key name.
-     * @param  boolean $avoidException Avoid throws exception if type of value is invalid (aka force).
-     * @throws Exception\InvalidKeyValueTypeException If type of value of key is invalid.
+     * @param  string      $key          Key name.
+     * @param  array|false $defaultValue Alternative value, if key is not an array.
      * @return self
      */
-    public function getSelf($key, $avoidException = false)
+    public function getSelf($key, $defaultValue = null)
     {
         $data = $this->get($key);
 
-        // If it is not an array, decides if will avoid exception or throw it.
+        // If it is not an array, will returns default value.
+        // If default value is false, so will returns false.
         if (!is_array($data)) {
-            if ($avoidException === false) {
-                throw new Exception\InvalidKeyValueTypeException("invalid key-value type exception");
+            if ($defaultValue === false) {
+                return false;
             }
 
-            // Else, returns an empty self.
-            return new self;
+            return new self($defaultValue);
         }
 
         // Else, returns a self instance filled.

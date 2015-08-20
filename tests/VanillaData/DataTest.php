@@ -210,16 +210,24 @@ class DataTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test a getSelf over invalid key.
-     * It'll avoid exception.
      * @covers Rentalhost\VanillaData\Data::getSelf
      */
     public function testGetSelfEmpty()
     {
         $data = new Data;
-        $dataSelf = $data->getSelf("invalid", true);
+        $dataSelf = $data->getSelf("invalid");
 
         $this->assertInstanceOf(Data::class, $dataSelf);
         $this->assertSame([], $dataSelf->getArray());
+
+        $dataSelf = $data->getSelf("invalid", [ "key1" => "value1" ]);
+
+        $this->assertInstanceOf(Data::class, $dataSelf);
+        $this->assertSame([ "key1" => "value1" ], $dataSelf->getArray());
+
+        $dataSelf = $data->getSelf("invalid", false);
+
+        $this->assertFalse($dataSelf);
     }
 
     /**
@@ -308,16 +316,5 @@ class DataTest extends PHPUnit_Framework_TestCase
             [ false ],
             [ (object) [] ]
         ];
-    }
-
-    /**
-     * Test the InvalidKeyValueTypeException.
-     */
-    public function testInvalidKeyValueTypeException()
-    {
-        $this->setExpectedException(Exception\InvalidKeyValueTypeException::class);
-
-        $data = new Data([ "key1" => "not an array or self" ]);
-        $data->getSelf("key1");
     }
 }
