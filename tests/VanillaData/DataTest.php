@@ -4,6 +4,10 @@ namespace Rentalhost\VanillaData;
 
 use PHPUnit_Framework_TestCase;
 
+/**
+ * Class DataTest
+ * @package Rentalhost\VanillaData
+ */
 class DataTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -31,63 +35,67 @@ class DataTest extends PHPUnit_Framework_TestCase
     {
         $data = new Data;
 
-        $this->assertSame([], $data->getArray());
+        static::assertSame([ ], $data->getArray());
 
-        $this->assertSame(null, $data->get("key1"));
-        $this->assertSame("default", $data->get("key1-default", "default"));
+        static::assertSame(null, $data->get('key1'));
+        static::assertSame('default', $data->get('key1-default', 'default'));
 
-        $this->assertSame(null, $data->getHTML("key1"));
-        $this->assertSame("default", $data->getHTML("key1-default", "default"));
+        static::assertSame(null, $data->getHTML('key1'));
+        static::assertSame('default', $data->getHTML('key1-default', 'default'));
 
-        $this->assertSame(null, $data->key1);
-        $this->assertSame(null, $data["key1"]);
+        /** @noinspection PhpUndefinedFieldInspection */
+        static::assertSame(null, $data->key1);
+        static::assertSame(null, $data['key1']);
 
-        $data->set("key1", "value1");
-        $this->assertSame("value1", $data->get("key1"));
-        $this->assertSame("value1", $data->getHTML("key1"));
-        $this->assertTrue($data->has("key1"));
+        $data->set('key1', 'value1');
+        static::assertSame('value1', $data->get('key1'));
+        static::assertSame('value1', $data->getHTML('key1'));
+        static::assertTrue($data->has('key1'));
 
-        $data->key2 = "value2";
-        $this->assertSame("value2", $data->key2);
-        $this->assertTrue(isset($data->key2));
+        /** @noinspection PhpUndefinedFieldInspection */
+        $data->key2 = 'value2';
+        /** @noinspection PhpUndefinedFieldInspection */
+        static::assertSame('value2', $data->key2);
+        static::assertTrue(isset( $data->key2 ));
 
-        $data["key3"] = "value3";
-        $this->assertSame("value3", $data["key3"]);
-        $this->assertTrue(isset($data["key3"]));
+        $data['key3'] = 'value3';
+        static::assertSame('value3', $data['key3']);
+        /** @noinspection UnSafeIsSetOverArrayInspection */
+        static::assertTrue(isset( $data['key3'] ));
 
-        $this->assertSame([
-            "key1" => "value1",
-            "key2" => "value2",
-            "key3" => "value3"
+        static::assertSame([
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => 'value3',
         ], $data->getArray());
-        $this->assertSame(3, count($data));
+        static::assertSame(3, count($data));
 
-        $data->remove("key1");
-        $this->assertSame([
-            "key2" => "value2",
-            "key3" => "value3"
+        $data->remove('key1');
+        static::assertSame([
+            'key2' => 'value2',
+            'key3' => 'value3',
         ], $data->getArray());
-        $this->assertSame(2, count($data));
+        static::assertSame(2, count($data));
 
-        unset($data->key2);
-        $this->assertSame([
-            "key3" => "value3"
+        unset( $data->key2 );
+        static::assertSame([
+            'key3' => 'value3',
         ], $data->getArray());
-        $this->assertSame(1, count($data));
+        static::assertSame(1, count($data));
 
-        unset($data["key3"]);
-        $this->assertSame([], $data->getArray());
-        $this->assertSame(0, count($data));
+        unset( $data['key3'] );
+        static::assertSame([ ], $data->getArray());
+        static::assertSame(0, count($data));
 
-        $data->set("key4", "value4");
-        $this->assertSame([
-            "key4" => "value4"
+        $data->set('key4', 'value4');
+        static::assertSame([
+            'key4' => 'value4',
         ], $data->getArray());
-        $this->assertSame(1, count($data));
+        static::assertSame(1, count($data));
 
         $data->clear();
-        $this->assertSame([], $data->getArray());
-        $this->assertSame(0, count($data));
+        static::assertSame([ ], $data->getArray());
+        static::assertSame(0, count($data));
     }
 
     /**
@@ -97,10 +105,13 @@ class DataTest extends PHPUnit_Framework_TestCase
     public function testGetHTML()
     {
         $data = new Data;
-        $data->key1 = "<value1>";
+        /** @noinspection PhpUndefinedFieldInspection */
+        /** @noinspection HtmlUnknownTag */
+        $data->key1 = '<value1>';
 
-        $this->assertSame("<value1>", $data->get("key1"));
-        $this->assertSame("&lt;value1&gt;", $data->getHTML("key1"));
+        /** @noinspection HtmlUnknownTag */
+        static::assertSame('<value1>', $data->get('key1'));
+        static::assertSame('&lt;value1&gt;', $data->getHTML('key1'));
     }
 
     /**
@@ -109,9 +120,9 @@ class DataTest extends PHPUnit_Framework_TestCase
      */
     public function testArrayConstructor()
     {
-        $data = new Data([ "key1" => "value1" ]);
+        $data = new Data([ 'key1' => 'value1' ]);
 
-        $this->assertSame([ "key1" => "value1" ], $data->getArray());
+        static::assertSame([ 'key1' => 'value1' ], $data->getArray());
     }
 
     /**
@@ -120,9 +131,9 @@ class DataTest extends PHPUnit_Framework_TestCase
      */
     public function testSelfInstanceConstructor()
     {
-        $data = new Data(new Data([ "key1" => "value1" ]));
+        $data = new Data(new Data([ 'key1' => 'value1' ]));
 
-        $this->assertSame([ "key1" => "value1" ], $data->getArray());
+        static::assertSame([ 'key1' => 'value1' ], $data->getArray());
     }
 
     /**
@@ -133,12 +144,12 @@ class DataTest extends PHPUnit_Framework_TestCase
     {
         $data = new Data;
 
-        $this->assertNull($data->get(null));
-        $this->assertNull($data->get(new Data));
-        $this->assertNull($data->get(true));
-        $this->assertNull($data->get(false));
+        static::assertNull($data->get(null));
+        static::assertNull($data->get(new Data));
+        static::assertNull($data->get(true));
+        static::assertNull($data->get(false));
 
-        $this->assertSame("default", $data->get(null, "default"));
+        static::assertSame('default', $data->get(null, 'default'));
     }
 
     /**
@@ -148,50 +159,50 @@ class DataTest extends PHPUnit_Framework_TestCase
     public function testIterator()
     {
         $array = [
-            "key1" => "value1",
-            "key2" => "value2",
-            "key3" => "value3",
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => 'value3',
         ];
         $data = new Data($array);
 
         // Basic foreach.
-        $result = [];
+        $result = [ ];
         foreach ($data->getIterator() as $key => $value) {
             $result[$key] = $value;
         }
 
-        $this->assertSame($result, $array);
+        static::assertSame($result, $array);
 
         // Test iterator.
         $dataIterator = $data->getIterator();
 
-        $this->assertSame(3, $dataIterator->count());
+        static::assertSame(3, $dataIterator->count());
 
-        $this->assertSame("key1", $dataIterator->key());
-        $this->assertSame("value1", $dataIterator->current());
-        $this->assertSame(true, $dataIterator->valid());
+        static::assertSame('key1', $dataIterator->key());
+        static::assertSame('value1', $dataIterator->current());
+        static::assertSame(true, $dataIterator->valid());
 
         // Test line-by-line.
         $dataIterator->next();
         $dataIterator->rewind();
-        $this->assertSame("key1", $dataIterator->key());
-        $this->assertSame("value1", $dataIterator->current());
-        $this->assertSame(true, $dataIterator->valid());
+        static::assertSame('key1', $dataIterator->key());
+        static::assertSame('value1', $dataIterator->current());
+        static::assertSame(true, $dataIterator->valid());
 
         $dataIterator->next();
-        $this->assertSame("key2", $dataIterator->key());
-        $this->assertSame("value2", $dataIterator->current());
-        $this->assertSame(true, $dataIterator->valid());
+        static::assertSame('key2', $dataIterator->key());
+        static::assertSame('value2', $dataIterator->current());
+        static::assertSame(true, $dataIterator->valid());
 
         $dataIterator->next();
-        $this->assertSame("key3", $dataIterator->key());
-        $this->assertSame("value3", $dataIterator->current());
-        $this->assertSame(true, $dataIterator->valid());
+        static::assertSame('key3', $dataIterator->key());
+        static::assertSame('value3', $dataIterator->current());
+        static::assertSame(true, $dataIterator->valid());
 
         $dataIterator->next();
-        $this->assertSame(null, $dataIterator->key());
-        $this->assertSame(null, $dataIterator->current());
-        $this->assertSame(false, $dataIterator->valid());
+        static::assertSame(null, $dataIterator->key());
+        static::assertSame(null, $dataIterator->current());
+        static::assertSame(false, $dataIterator->valid());
     }
 
     /**
@@ -200,12 +211,12 @@ class DataTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSelf()
     {
-        $data = new Data([ "key1" => [ "key1a" => 1, "key1b" => 2 ] ]);
-        $dataSelf = $data->getSelf("key1");
+        $data = new Data([ 'key1' => [ 'key1a' => 1, 'key1b' => 2 ] ]);
+        $dataSelf = $data->getSelf('key1');
 
-        $this->assertInstanceOf(Data::class, $dataSelf);
-        $this->assertSame([ "key1a" => 1, "key1b" => 2 ], $dataSelf->getArray());
-        $this->assertSame(2, count($dataSelf));
+        static::assertInstanceOf(Data::class, $dataSelf);
+        static::assertSame([ 'key1a' => 1, 'key1b' => 2 ], $dataSelf->getArray());
+        static::assertSame(2, count($dataSelf));
     }
 
     /**
@@ -215,19 +226,19 @@ class DataTest extends PHPUnit_Framework_TestCase
     public function testGetSelfEmpty()
     {
         $data = new Data;
-        $dataSelf = $data->getSelf("invalid");
+        $dataSelf = $data->getSelf('invalid');
 
-        $this->assertInstanceOf(Data::class, $dataSelf);
-        $this->assertSame([], $dataSelf->getArray());
+        static::assertInstanceOf(Data::class, $dataSelf);
+        static::assertSame([ ], $dataSelf->getArray());
 
-        $dataSelf = $data->getSelf("invalid", [ "key1" => "value1" ]);
+        $dataSelf = $data->getSelf('invalid', [ 'key1' => 'value1' ]);
 
-        $this->assertInstanceOf(Data::class, $dataSelf);
-        $this->assertSame([ "key1" => "value1" ], $dataSelf->getArray());
+        static::assertInstanceOf(Data::class, $dataSelf);
+        static::assertSame([ 'key1' => 'value1' ], $dataSelf->getArray());
 
-        $dataSelf = $data->getSelf("invalid", false);
+        $dataSelf = $data->getSelf('invalid', false);
 
-        $this->assertFalse($dataSelf);
+        static::assertFalse($dataSelf);
     }
 
     /**
@@ -236,35 +247,36 @@ class DataTest extends PHPUnit_Framework_TestCase
      */
     public function testSetArray()
     {
-        $data = new Data([ "key1" => "value1" ]);
+        $data = new Data([ 'key1' => 'value1' ]);
 
-        $this->assertSame([ "key1" => "value1" ], $data->getArray());
+        static::assertSame([ 'key1' => 'value1' ], $data->getArray());
 
-        $data->setArray([ "key2" => "value2" ]);
-        $this->assertSame([ "key1" => "value1", "key2" => "value2" ], $data->getArray());
+        $data->setArray([ 'key2' => 'value2' ]);
+        static::assertSame([ 'key1' => 'value1', 'key2' => 'value2' ], $data->getArray());
 
-        $data->setArray(new Data([ "key3" => "value3" ]));
-        $this->assertSame([ "key1" => "value1", "key2" => "value2", "key3" => "value3" ], $data->getArray());
+        $data->setArray(new Data([ 'key3' => 'value3' ]));
+        static::assertSame([ 'key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3' ], $data->getArray());
 
         // Replaces.
-        $data->setArray(new Data([ "key3" => "value3b" ]));
-        $this->assertSame([ "key1" => "value1", "key2" => "value2", "key3" => "value3b" ], $data->getArray());
+        $data->setArray(new Data([ 'key3' => 'value3b' ]));
+        static::assertSame([ 'key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3b' ], $data->getArray());
 
-        $data->setArray(new Data([ "key3" => "value3c", "key4" => "value4" ]), false);
-        $this->assertSame([ "key1" => "value1", "key2" => "value2", "key3" => "value3b", "key4" => "value4" ], $data->getArray());
+        $data->setArray(new Data([ 'key3' => 'value3c', 'key4' => 'value4' ]), false);
+        static::assertSame([ 'key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3b', 'key4' => 'value4' ], $data->getArray());
 
-        unset($data->key2, $data->key3, $data->key4);
-        $this->assertSame([ "key1" => "value1" ], $data->getArray());
+        unset( $data->key2, $data->key3, $data->key4 );
+        static::assertSame([ 'key1' => 'value1' ], $data->getArray());
 
-        $data->setArray(new Data([ "key1" => "value1b" ]), false);
-        $this->assertSame([ "key1" => "value1" ], $data->getArray());
+        $data->setArray(new Data([ 'key1' => 'value1b' ]), false);
+        static::assertSame([ 'key1' => 'value1' ], $data->getArray());
 
-        $data->setArray(new Data([ "key1" => "value1b" ]));
-        $this->assertSame([ "key1" => "value1b" ], $data->getArray());
+        $data->setArray(new Data([ 'key1' => 'value1b' ]));
+        static::assertSame([ 'key1' => 'value1b' ], $data->getArray());
 
-        $data->key3 = "value3";
-        $data->setArray(new Data([ "key1" => "value1", "key3" => "value3b", "key4" => "value4" ]), false);
-        $this->assertSame([ "key1" => "value1b", "key3" => "value3", "key4" => "value4" ], $data->getArray());
+        /** @noinspection PhpUndefinedFieldInspection */
+        $data->key3 = 'value3';
+        $data->setArray(new Data([ 'key1' => 'value1', 'key3' => 'value3b', 'key4' => 'value4' ]), false);
+        static::assertSame([ 'key1' => 'value1b', 'key3' => 'value3', 'key4' => 'value4' ], $data->getArray());
     }
 
     /**
@@ -273,48 +285,54 @@ class DataTest extends PHPUnit_Framework_TestCase
      */
     public function testReconfigureArray()
     {
-        $data = new Data([ "key1" => "value1" ]);
+        $data = new Data([ 'key1' => 'value1' ]);
 
-        $this->assertSame([ "key1" => "value1" ], $data->getArray());
+        static::assertSame([ 'key1' => 'value1' ], $data->getArray());
 
         $data->reconfigureArray();
-        $this->assertSame([], $data->getArray());
+        static::assertSame([ ], $data->getArray());
 
-        $data->reconfigureArray([ "key2" => "value2" ]);
-        $this->assertSame([ "key2" => "value2" ], $data->getArray());
+        $data->reconfigureArray([ 'key2' => 'value2' ]);
+        static::assertSame([ 'key2' => 'value2' ], $data->getArray());
 
-        $data->reconfigureArray(new Data([ "key3" => "value3" ]));
-        $this->assertSame([ "key3" => "value3" ], $data->getArray());
+        $data->reconfigureArray(new Data([ 'key3' => 'value3' ]));
+        static::assertSame([ 'key3' => 'value3' ], $data->getArray());
     }
 
     /**
      * Test the InvalidDataTypeException on setArray.
      * @dataProvider dataInvalidDataTypeException
      */
-    public function testInvalidDataTypeExceptionOnSetArray($invalidData)
+    public function testInvalidDataTypeExceptionOnSetArray()
     {
-        $this->setExpectedException(Exception\InvalidDataTypeException::class);
-        (new Data())->setArray("invalid");
+        static::setExpectedException(Exception\InvalidDataTypeException::class);
+        (new Data())->setArray('invalid');
     }
 
     /**
      * Test the InvalidDataTypeException.
+     *
+     * @param mixed $invalidData Invalid data to throws the exception.
+     *
      * @dataProvider dataInvalidDataTypeException
      */
     public function testInvalidDataTypeException($invalidData)
     {
-        $this->setExpectedException(Exception\InvalidDataTypeException::class);
+        static::setExpectedException(Exception\InvalidDataTypeException::class);
         new Data($invalidData);
     }
 
+    /**
+     * @return array
+     */
     public function dataInvalidDataTypeException()
     {
         return [
-            [ "string" ],
+            [ 'string' ],
             [ 1 ],
             [ true ],
             [ false ],
-            [ (object) [] ]
+            [ (object) [ ] ],
         ];
     }
 }
