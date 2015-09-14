@@ -217,6 +217,14 @@ class DataTest extends PHPUnit_Framework_TestCase
         static::assertInstanceOf(Data::class, $dataSelf);
         static::assertSame([ 'key1a' => 1, 'key1b' => 2 ], $dataSelf->getArray());
         static::assertSame(2, count($dataSelf));
+
+        $dataInner = new Data([ 'key1' => 'value1' ]);
+        $dataWrapper = new Data([ 'key2' => $dataInner ]);
+
+        static::assertInstanceOf(Data::class, $dataWrapper->get('key2'));
+        static::assertInstanceOf(Data::class, $dataWrapper->getSelf('key2'));
+        static::assertSame($dataInner, $dataWrapper->getSelf('key2'));
+        static::assertSame('value1', $dataWrapper->getSelf('key2')->key1);
     }
 
     /**

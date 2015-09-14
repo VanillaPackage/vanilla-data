@@ -2,9 +2,9 @@
 
 namespace Rentalhost\VanillaData;
 
-use Countable;
 use ArrayAccess;
 use ArrayIterator;
+use Countable;
 
 /**
  * Class Data
@@ -89,6 +89,11 @@ class Data implements Countable, ArrayAccess
     public function getSelf($key, $defaultValue = null)
     {
         $data = $this->get($key);
+
+        // If it is a Data instance, returns itself.
+        if ($data instanceof self) {
+            return $data;
+        }
 
         // If it is not an array, will returns default value.
         // If default value is false, so will returns false.
