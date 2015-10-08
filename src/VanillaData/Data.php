@@ -141,13 +141,17 @@ class Data implements Countable, ArrayAccess
     /**
      * Set an array or self to internal array.
      *
-     * @param array|self $data      Array or self instance.
-     * @param boolean    $overwrite When true, will replace existent keys.
+     * @param array|self|mixed $data      Array or self instance.
+     * @param boolean          $overwrite When true, will replace existent keys.
      *
      * @throws Exception\InvalidDataTypeException If type of data is invalid.
      */
     public function setArray($data, $overwrite = true)
     {
+        if (!$data) {
+            return;
+        }
+
         // Validate data.
         if (!is_array($data)
             && !$data instanceof self

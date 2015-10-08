@@ -285,6 +285,13 @@ class DataTest extends PHPUnit_Framework_TestCase
         $data->key3 = 'value3';
         $data->setArray(new Data([ 'key1' => 'value1', 'key3' => 'value3b', 'key4' => 'value4' ]), false);
         static::assertSame([ 'key1' => 'value1b', 'key3' => 'value3', 'key4' => 'value4' ], $data->getArray());
+
+        $data = new Data([ 'key1' => 'value1' ]);
+        $data->setArray(false);
+        $data->setArray(null);
+        $data->setArray(0);
+        $data->setArray('');
+        static::assertSame([ 'key1' => 'value1' ], $data->getArray());
     }
 
     /**
