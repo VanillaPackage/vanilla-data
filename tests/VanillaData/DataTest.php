@@ -250,6 +250,45 @@ class DataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test extend method.
+     * @covers Rentalhost\VanillaData\Data::extend
+     */
+    public function testExtend()
+    {
+        $data = Data::extend();
+
+        static::assertSame([ ], $data->getArray());
+
+        $data = Data::extend([ ]);
+
+        static::assertSame([ ], $data->getArray());
+
+        $data = Data::extend([ ], [ ]);
+
+        static::assertSame([ ], $data->getArray());
+
+        $data = Data::extend([ 'foo' => 'bar' ], [ ]);
+
+        static::assertSame([ 'foo' => 'bar' ], $data->getArray());
+
+        $data = Data::extend([ ], [ 'foo' => 'bar' ]);
+
+        static::assertSame([ 'foo' => 'bar' ], $data->getArray());
+
+        $data = Data::extend([ 'foo' => 'old' ], [ 'foo' => 'bar' ]);
+
+        static::assertSame([ 'foo' => 'bar' ], $data->getArray());
+
+        $data = Data::extend([ 'foo1' => 'value1', 'foo2' => 'value2' ], [ 'foo1' => 'newValue' ]);
+
+        static::assertSame([ 'foo1' => 'newValue', 'foo2' => 'value2' ], $data->getArray());
+
+        $data = Data::extend([ 'foo1' => 'value1' ], [ 'foo1' => 'newValue', 'foo2' => 'value2' ]);
+
+        static::assertSame([ 'foo1' => 'newValue', 'foo2' => 'value2' ], $data->getArray());
+    }
+
+    /**
      * Test setArray.
      * @covers Rentalhost\VanillaData\Data::setArray
      */

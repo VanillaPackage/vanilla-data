@@ -139,6 +139,24 @@ class Data implements Countable, ArrayAccess
     }
 
     /**
+     * Extend all arguments passed one over the other.
+     *
+     * @param Data|array ...$args Arguments.
+     *
+     * @return self
+     */
+    public static function extend()
+    {
+        $data = new self;
+
+        foreach (func_get_args() as $arg) {
+            $data->setArray($arg);
+        }
+
+        return $data;
+    }
+
+    /**
      * Set an array or self to internal array.
      *
      * @param array|self|mixed $data      Array or self instance.
