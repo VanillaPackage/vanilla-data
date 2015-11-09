@@ -193,14 +193,16 @@ class Data implements Countable, ArrayAccess
     /**
      * Reconfigure internal array to a new one, clearing all data.
      *
-     * @param array|self $data Array or self instance.
+     * @param array|self|null|false $data Array or self instance.
      *
      * @throws Exception\InvalidDataTypeException If type of data is invalid.
      */
     public function reconfigureArray($data = null)
     {
-        if ($data === null) {
-            // Reconfigure over an empty array.
+        if ($data === null ||
+            $data === false
+        ) {
+            // Reconfigure over an null or false data.
             $this->data = [ ];
         }
         else if (is_array($data)) {

@@ -346,6 +346,11 @@ class DataTest extends PHPUnit_Framework_TestCase
         $data->reconfigureArray();
         static::assertSame([ ], $data->getArray());
 
+        $data = new Data([ 'key1' => 'value1' ]);
+
+        $data->reconfigureArray(false);
+        static::assertSame([ ], $data->getArray());
+
         $data->reconfigureArray([ 'key2' => 'value2' ]);
         static::assertSame([ 'key2' => 'value2' ], $data->getArray());
 
@@ -382,10 +387,11 @@ class DataTest extends PHPUnit_Framework_TestCase
     public function dataInvalidDataTypeException()
     {
         return [
+            [ '' ],
             [ 'string' ],
             [ 1 ],
+            [ 0 ],
             [ true ],
-            [ false ],
             [ (object) [ ] ],
         ];
     }
