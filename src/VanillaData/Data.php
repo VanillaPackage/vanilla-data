@@ -120,10 +120,17 @@ class Data implements Countable, ArrayAccess
 
     /**
      * Returns an array iterator.
+     *
+     * @param bool $transform Faz com que o valor do iterator retorne uma instância encapsulada.
+     *
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator($transform = false)
     {
+        if ($transform === true) {
+            return new DataIterator($this->data);
+        }
+
         return new ArrayIterator($this->data);
     }
 

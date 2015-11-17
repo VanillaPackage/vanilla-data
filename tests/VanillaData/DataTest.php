@@ -163,7 +163,7 @@ class DataTest extends PHPUnit_Framework_TestCase
             'key2' => 'value2',
             'key3' => 'value3',
         ];
-        $data = new Data($array);
+        $data  = new Data($array);
 
         // Basic foreach.
         $result = [ ];
@@ -206,19 +206,35 @@ class DataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test a self iterator.
+     * @covers Rentalhost\VanillaData\Data::getIterator
+     */
+    public function testIteratorSelf()
+    {
+        $data = new Data([ 'outer' => [ 'inner' => 'value' ] ]);
+
+        static::assertInternalType('array', $data->outer);
+
+        foreach ($data->getIterator(true) as $item) {
+            static::assertInstanceOf(Data::class, $item);
+            static::assertSame('value', $item->inner);
+        }
+    }
+
+    /**
      * Test the getSelf method.
      * @covers Rentalhost\VanillaData\Data::getSelf
      */
     public function testGetSelf()
     {
-        $data = new Data([ 'key1' => [ 'key1a' => 1, 'key1b' => 2 ] ]);
+        $data     = new Data([ 'key1' => [ 'key1a' => 1, 'key1b' => 2 ] ]);
         $dataSelf = $data->getSelf('key1');
 
         static::assertInstanceOf(Data::class, $dataSelf);
         static::assertSame([ 'key1a' => 1, 'key1b' => 2 ], $dataSelf->getArray());
         static::assertSame(2, count($dataSelf));
 
-        $dataInner = new Data([ 'key1' => 'value1' ]);
+        $dataInner   = new Data([ 'key1' => 'value1' ]);
         $dataWrapper = new Data([ 'key2' => $dataInner ]);
 
         static::assertInstanceOf(Data::class, $dataWrapper->get('key2'));
@@ -233,7 +249,7 @@ class DataTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSelfEmpty()
     {
-        $data = new Data;
+        $data     = new Data;
         $dataSelf = $data->getSelf('invalid');
 
         static::assertInstanceOf(Data::class, $dataSelf);
