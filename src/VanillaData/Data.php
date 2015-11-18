@@ -164,6 +164,19 @@ class Data implements Countable, ArrayAccess
     }
 
     /**
+     * Try reuse instance from value, without reinstantiate it.
+     * When is not possible, then a new instance is created.
+     *
+     * @param Data|array|null $value Data to try reuse.
+     *
+     * @return self
+     */
+    public static function from($value)
+    {
+        return $value instanceof self ? $value : new Data($value);
+    }
+
+    /**
      * Set an array or self to internal array.
      *
      * @param array|self|mixed $data      Array or self instance.

@@ -208,6 +208,7 @@ class DataTest extends PHPUnit_Framework_TestCase
     /**
      * Test a self iterator.
      * @covers Rentalhost\VanillaData\Data::getIterator
+     * @covers Rentalhost\VanillaData\DataIterator::current
      */
     public function testIteratorSelf()
     {
@@ -302,6 +303,18 @@ class DataTest extends PHPUnit_Framework_TestCase
         $data = Data::extend([ 'foo1' => 'value1' ], [ 'foo1' => 'newValue', 'foo2' => 'value2' ]);
 
         static::assertSame([ 'foo1' => 'newValue', 'foo2' => 'value2' ], $data->getArray());
+    }
+
+    /**
+     * Test from method.
+     * @covers Rentalhost\VanillaData\Data::from
+     */
+    public function testFrom()
+    {
+        $data = new Data();
+
+        static::assertSame($data, Data::from($data));
+        static::assertNotSame(new Data([ 'key' => 'value' ]), Data::from([ 'key' => 'value' ]));
     }
 
     /**
